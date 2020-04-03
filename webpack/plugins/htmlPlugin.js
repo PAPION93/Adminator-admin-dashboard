@@ -4,7 +4,7 @@ const
   HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const titles = {
-  'index': 'Dashboard',
+  'index': 'Signin',
   'blank': 'Blank',
   'buttons': 'Buttons',
   'calendar': 'Calendar',
@@ -22,6 +22,7 @@ const titles = {
   '404': '404',
   '500': '500',
   'basic-table': 'Basic Table',
+  'dashboard': 'Dashboard'
 };
 
 module.exports = Object.keys(titles).map(title => {
