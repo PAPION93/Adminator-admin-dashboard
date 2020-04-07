@@ -1,0 +1,83 @@
+<?php
+
+$ch = curl_init(); //curl 초기화
+curl_setopt($ch, CURLOPT_URL, 'https://openapi.naver.com/v1/search/local.json?query=' . urlencode("만촌동 소방서") . '&display=10&start=1&sort=random'); //URL 지정하기
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'X-Naver-Client-Id: kaFqFK6EVSid4aZ4eMdQ',
+    'X-Naver-Client-Secret: XuNhjkb5xN',
+));
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //요청 결과를 문자열로 반환
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); //connection timeout 10초
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //원격 서버의 인증서가 유효한지 검사 안함
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo "<pre>";
+print_r(json_decode($response, true));
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>간단한 지도 표시하기</title>
+	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=wf42dlqgd0"></script>
+</head>
+<body>
+
+<div id="map" style="width:600px;height:800px;"></div>
+
+<script>
+
+// 지도 출력
+var map = new naver.maps.Map('map', {
+	center: new naver.maps.LatLng(37.3595704, 127.105399),
+	scaleControl: false,
+	logoControl: false,
+	mapDataControl: false,
+	zoomControl: true,
+	minZoom: 6,
+
+
+	zoom: 8
+});
+
+// 마커 찍기
+var marker = new naver.maps.Marker({
+	position: new naver.maps.LatLng(459092, 361909),
+	map: map
+});
+
+
+var btns = $(".buttons > input");
+btns.on("click", function(e) {
+	e.preventDefault();
+
+	var mapTypeId = this.id;
+
+	if (map.getMapTypeId() !== naver.maps.MapTypeId[mapTypeId]) {
+		map.setMapTypeId(naver.maps.MapTypeId[mapTypeId]); // 지도 유형 변경하기
+
+		btns.removeClass("control-on");
+		$(this).addClass("control-on");
+	}
+});
+
+
+</script>
+
+<div class="buttons">
+	<input id="NORMAL" type="button" value="일반지도" class="control-btn control-on">
+	<input id="TERRAIN" type="button" value="지형도" class="control-btn">
+	<input id="SATELLITE" type="button" value="위성지도" class="control-btn">
+	<input id="HYBRID" type="button" value="겹쳐보기" class="control-btn">
+</div>
+
+</body>
+</html>
+
